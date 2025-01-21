@@ -222,3 +222,40 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Jekyll community
 - Lunr.js for search functionality
 - Contributors and users
+
+## Test Commit
+
+# John Smith Photography Collection Digital Repository
+
+This digital repository contains the archival materials from the John Smith Photography Collection, featuring street photography, portraits, and documentary work from 1950-1990.
+
+## Collection Overview
+
+- **Reference Code**: F001
+- **Date Range**: 1950-1990
+- **Extent**: 15 linear feet (45 boxes), including 5,000 photographs and 100 audio recordings
+- **Creator**: John Smith (1925-1995)
+
+## Series
+
+1. **Street Photography Series (S001)**
+   - Date Range: 1950-1985
+   - Contains: 3,000 photographs documenting street life in various Asian cities
+   - Features: Markets, festivals, daily activities
+   - Locations: Hong Kong, Tokyo, Singapore
+
+## Digital Objects
+
+The repository includes various digital objects:
+- High-resolution TIFF master files
+- Web-optimized JPEG access copies
+- PDF finding aids and documentation
+- MP4 video files (where applicable)
+
+## Access
+
+All materials are accessible through this digital repository. For high-resolution copies or additional information, please contact the archive.
+
+## Rights
+
+Copyright is held by the Smith estate. Materials are available for research purposes.

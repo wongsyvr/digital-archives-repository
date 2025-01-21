@@ -1,39 +1,164 @@
 ---
 layout: default
 ---
-<div class="hierarchy-level series-level">
-    <h1 class="hierarchy-title">{{ page.title }}</h1>
-    
-    <div class="metadata">
-        <p><strong>Reference Code:</strong> {{ page.reference_code }}</p>
-        <p><strong>Dates:</strong> {{ page.dates }}</p>
-        <p><strong>Physical Description:</strong> {{ page.physical_description }}</p>
-        <p><strong>Scope and Content:</strong> {{ page.scope_content }}</p>
-        {% if page.arrangement %}
-        <p><strong>Arrangement:</strong> {{ page.arrangement }}</p>
+
+<div class="series-container">
+    <nav class="breadcrumb">
+        <a href="{{ '/fonds' | relative_url }}">Collections</a>
+        {% if page.fonds_id %}
+        {% assign parent_fonds = site.fonds | where: "reference_code", page.fonds_id | first %}
+        {% if parent_fonds %}
+        <span class="separator">/</span>
+        <a href="{{ parent_fonds.url | relative_url }}">{{ parent_fonds.title }}</a>
         {% endif %}
-    </div>
+        {% endif %}
+        <span class="separator">/</span>
+        <span class="current">{{ page.title }}</span>
+    </nav>
 
-    <div class="content">
-        {{ content }}
-    </div>
+    <article class="series-content">
+        <header>
+            <h1>{{ page.title }}</h1>
+            <div class="metadata">
+                <p><strong>Reference Code:</strong> {{ page.reference_code }}</p>
+                <p><strong>Dates:</strong> {{ page.dates }}</p>
+                <p><strong>Physical Description:</strong> {{ page.physical_description }}</p>
+                {% if page.scope_content %}
+                <p><strong>Scope and Content:</strong> {{ page.scope_content }}</p>
+                {% endif %}
+                {% if page.arrangement %}
+                <p><strong>Arrangement:</strong> {{ page.arrangement }}</p>
+                {% endif %}
+            </div>
+        </header>
 
-    {% assign parent_fonds = site.fonds | where: "reference_code", page.fonds_id | first %}
-    {% if parent_fonds %}
-    <div class="parent-fonds">
-        <p><strong>Part of Fonds:</strong> <a href="{{ parent_fonds.url }}">{{ parent_fonds.title }}</a></p>
-    </div>
-    {% endif %}
+        <div class="content">
+            {{ content }}
+        </div>
 
-    {% assign related_files = site.files | where: "series_id", page.reference_code %}
-    {% if related_files.size > 0 %}
-    <div class="related-files">
-        <h2>Files in this Series</h2>
-        <ul>
-        {% for file in related_files %}
-            <li><a href="{{ file.url }}">{{ file.title }}</a></li>
-        {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
+        {% if page.technical_requirements or page.physical_condition %}
+        <section class="technical-info">
+            <h2>Technical Information</h2>
+            {% if page.physical_condition %}
+            <p><strong>Physical Condition:</strong> {{ page.physical_condition }}</p>
+            {% endif %}
+            {% if page.technical_requirements %}
+            <p><strong>Technical Requirements:</strong> {{ page.technical_requirements }}</p>
+            {% endif %}
+        </section>
+        {% endif %}
+
+        {% if page.rights_info %}
+        <section class="rights-info">
+            <h2>Rights Information</h2>
+            {% if page.rights_info.copyright_status %}
+            <p><strong>Copyright Status:</strong> {{ page.rights_info.copyright_status }}</p>
+            {% endif %}
+            {% if page.rights_info.access_status %}
+            <p><strong>Access Status:</strong> {{ page.rights_info.access_status }}</p>
+            {% endif %}
+            {% if page.rights_info.reproduction %}
+            <p><strong>Reproduction:</strong> {{ page.rights_info.reproduction }}</p>
+            {% endif %}
+        </section>
+        {% endif %}
+
+        {% if page.related_materials %}
+        <section class="related-materials">
+            <h2>Related Materials</h2>
+            <p>{{ page.related_materials }}</p>
+        </section>
+        {% endif %}
+    </article>
 </div>
+
+<style>
+.series-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.breadcrumb {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.breadcrumb a {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb .separator {
+    margin: 0 0.5rem;
+    color: #6c757d;
+}
+
+.breadcrumb .current {
+    color: #6c757d;
+}
+
+.series-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.series-content header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.series-content h1 {
+    margin: 0 0 1rem 0;
+    color: #212529;
+}
+
+.metadata {
+    display: grid;
+    gap: 1rem;
+}
+
+.metadata p {
+    margin: 0;
+}
+
+.metadata strong {
+    color: #495057;
+}
+
+.content {
+    margin: 2rem 0;
+    line-height: 1.6;
+}
+
+section {
+    margin: 2rem 0;
+    padding-top: 1rem;
+    border-top: 1px solid #dee2e6;
+}
+
+section h2 {
+    margin: 0 0 1rem 0;
+    font-size: 1.5rem;
+    color: #212529;
+}
+
+@media (max-width: 768px) {
+    .series-container {
+        padding: 1rem;
+    }
+    
+    .series-content {
+        padding: 1rem;
+    }
+}
+</style>

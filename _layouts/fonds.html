@@ -1,31 +1,193 @@
 ---
 layout: default
 ---
-<div class="hierarchy-level fonds-level">
-    <h1 class="hierarchy-title">{{ page.title }}</h1>
-    
-    <div class="metadata">
-        <p><strong>Reference Code:</strong> {{ page.reference_code }}</p>
-        <p><strong>Dates:</strong> {{ page.dates }}</p>
-        <p><strong>Extent:</strong> {{ page.extent }}</p>
-        <p><strong>Creator:</strong> {{ page.creator }}</p>
-        <p><strong>Administrative History:</strong> {{ page.administrative_history }}</p>
-        <p><strong>Scope and Content:</strong> {{ page.scope_content }}</p>
-    </div>
 
-    <div class="content">
-        {{ content }}
-    </div>
+<div class="fonds-container">
+    <nav class="breadcrumb">
+        <a href="{{ '/fonds' | relative_url }}">Collections</a>
+        <span class="separator">/</span>
+        <span class="current">{{ page.title }}</span>
+    </nav>
 
-    {% assign related_series = site.series | where: "fonds_id", page.reference_code %}
-    {% if related_series.size > 0 %}
-    <div class="related-series">
-        <h2>Series in this Fonds</h2>
-        <ul>
-        {% for series in related_series %}
-            <li><a href="{{ series.url }}">{{ series.title }}</a></li>
-        {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
+    <article class="fonds-content">
+        <header>
+            <h1>{{ page.title }}</h1>
+            <div class="metadata">
+                <p><strong>Reference Code:</strong> {{ page.reference_code }}</p>
+                <p><strong>Dates:</strong> {{ page.dates }}</p>
+                <p><strong>Extent:</strong> {{ page.extent }}</p>
+                <p><strong>Creator:</strong> {{ page.creator.name }} ({{ page.creator.dates }})</p>
+            </div>
+        </header>
+
+        {% if page.administrative_history %}
+        <section class="administrative-history">
+            <h2>Administrative History</h2>
+            <p>{{ page.administrative_history }}</p>
+        </section>
+        {% endif %}
+
+        {% if page.scope_content %}
+        <section class="scope-content">
+            <h2>Scope and Content</h2>
+            <p>{{ page.scope_content }}</p>
+        </section>
+        {% endif %}
+
+        <div class="content">
+            {{ content }}
+        </div>
+
+        {% assign series = site.series | where: "fonds_id", page.reference_code %}
+        {% if series.size > 0 %}
+        <section class="series-list">
+            <h2>Series in this Collection</h2>
+            <div class="series-grid">
+                {% for series_item in series %}
+                <div class="series-card">
+                    <h3><a href="{{ series_item.url | relative_url }}">{{ series_item.title }}</a></h3>
+                    <p class="dates">{{ series_item.dates }}</p>
+                    {% if series_item.scope_content %}
+                    <p class="description">{{ series_item.scope_content | truncate: 150 }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+    </article>
 </div>
+
+<style>
+.fonds-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.breadcrumb {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.breadcrumb a {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb .separator {
+    margin: 0 0.5rem;
+    color: #6c757d;
+}
+
+.breadcrumb .current {
+    color: #6c757d;
+}
+
+.fonds-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.fonds-content header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.fonds-content h1 {
+    margin: 0 0 1rem 0;
+    color: #212529;
+}
+
+.metadata {
+    display: grid;
+    gap: 1rem;
+}
+
+.metadata p {
+    margin: 0;
+}
+
+.metadata strong {
+    color: #495057;
+}
+
+section {
+    margin: 2rem 0;
+    padding-top: 1rem;
+    border-top: 1px solid #dee2e6;
+}
+
+section h2 {
+    margin: 0 0 1rem 0;
+    font-size: 1.5rem;
+    color: #212529;
+}
+
+.content {
+    margin: 2rem 0;
+    line-height: 1.6;
+}
+
+.series-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.series-card {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+}
+
+.series-card h3 {
+    margin: 0 0 0.5rem 0;
+}
+
+.series-card h3 a {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+.series-card h3 a:hover {
+    text-decoration: underline;
+}
+
+.series-card .dates {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.series-card .description {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+    .fonds-container {
+        padding: 1rem;
+    }
+    
+    .fonds-content {
+        padding: 1rem;
+    }
+    
+    .series-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>

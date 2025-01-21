@@ -23,6 +23,9 @@ collections:
   files:
     output: true
     permalink: /files/:path/
+  items:
+    output: true
+    permalink: /items/:path/
 
 # Collection defaults
 defaults:
@@ -41,6 +44,11 @@ defaults:
       type: "files"
     values:
       layout: "file"
+  - scope:
+      path: ""
+      type: "items"
+    values:
+      layout: "item"
 
 # Exclude from processing
 exclude:

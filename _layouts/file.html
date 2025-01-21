@@ -1,42 +1,380 @@
 ---
 layout: default
 ---
-<div class="hierarchy-level file-level">
-    <h1 class="hierarchy-title">{{ page.title }}</h1>
-    
-    <div class="metadata">
-        <p><strong>Reference Code:</strong> {{ page.reference_code }}</p>
-        <p><strong>Dates:</strong> {{ page.dates }}</p>
-        <p><strong>Physical Description:</strong> {{ page.physical_description }}</p>
-        <p><strong>Scope and Content:</strong> {{ page.scope_content }}</p>
-    </div>
 
-    <div class="content">
-        {{ content }}
-    </div>
+<div class="file-container">
+    <nav class="breadcrumb">
+        <a href="{{ '/fonds' | relative_url }}">Collections</a>
+        {% assign series = site.series | where: "reference_code", page.series_id | first %}
+        {% if series %}
+            {% assign fonds = site.fonds | where: "reference_code", series.fonds_id | first %}
+            {% if fonds %}
+            <span class="separator">/</span>
+            <a href="{{ fonds.url | relative_url }}">{{ fonds.title }}</a>
+            {% endif %}
+            <span class="separator">/</span>
+            <a href="{{ series.url | relative_url }}">{{ series.title }}</a>
+        {% endif %}
+        <span class="separator">/</span>
+        <span class="current">{{ page.title }}</span>
+    </nav>
 
-    {% assign parent_series = site.series | where: "reference_code", page.series_id | first %}
-    {% if parent_series %}
-    <div class="parent-series">
-        <p><strong>Part of Series:</strong> <a href="{{ parent_series.url }}">{{ parent_series.title }}</a></p>
-    </div>
-    {% endif %}
-
-    {% assign related_items = site.items | where: "file_id", page.reference_code %}
-    {% if related_items.size > 0 %}
-    <div class="related-items">
-        <h2>Items in this File</h2>
-        <div class="items-grid">
-        {% for item in related_items %}
-            <div class="item-card">
-                {% if item.thumbnail %}
-                <img src="{{ item.thumbnail }}" alt="{{ item.title }}">
+    <article class="file-content">
+        <header>
+            <h1>{{ page.title }}</h1>
+            <div class="metadata">
+                <p><strong>Reference Code:</strong> {{ page.reference_code }}</p>
+                <p><strong>Date:</strong> {{ page.dates }}</p>
+                <p><strong>Physical Description:</strong> {{ page.physical_description }}</p>
+                {% if page.location %}
+                <p><strong>Location:</strong> {{ page.location }}</p>
                 {% endif %}
-                <h3><a href="{{ item.url }}">{{ item.title }}</a></h3>
-                <p>{{ item.date }}</p>
+                {% if page.photographer %}
+                <p><strong>Photographer:</strong> {{ page.photographer }}</p>
+                {% endif %}
             </div>
-        {% endfor %}
+        </header>
+
+        {% if page.scope_content %}
+        <section class="scope-content">
+            <h2>Scope and Content</h2>
+            <p>{{ page.scope_content }}</p>
+        </section>
+        {% endif %}
+
+        <div class="content">
+            {{ content }}
         </div>
-    </div>
-    {% endif %}
+
+        {% if page.digital_objects %}
+        <section class="digital-objects">
+            <h2>Digital Objects</h2>
+            <div class="objects-grid">
+                {% for object in page.digital_objects %}
+                <div class="object-card">
+                    {% if object.thumbnail %}
+                    <div class="thumbnail">
+                        <img src="{{ site.baseurl }}/assets/thumbnails/{{ object.thumbnail }}" alt="Thumbnail for {{ object.label }}">
+                    </div>
+                    {% endif %}
+                    
+                    <div class="object-info">
+                        <h3>{{ object.label }}</h3>
+                        {% if object.description %}
+                        <p class="description">{{ object.description }}</p>
+                        {% endif %}
+                        
+                        <div class="object-metadata">
+                            {% if object.type %}
+                            <span class="type">{{ object.type }}</span>
+                            {% endif %}
+                            {% if object.format %}
+                            <span class="format">{{ object.format }}</span>
+                            {% endif %}
+                            {% if object.size %}
+                            <span class="size">{{ object.size }}</span>
+                            {% endif %}
+                        </div>
+                        
+                        <a href="{{ site.baseurl }}/assets/digital-objects/{{ object.file }}" 
+                           class="download-button" 
+                           download>
+                            Download {{ object.type }}
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        <section class="technical-details">
+            <h2>Technical Information</h2>
+            <div class="details-grid">
+                {% if page.medium %}
+                <div class="detail-item">
+                    <h3>Medium</h3>
+                    <p>{{ page.medium }}</p>
+                </div>
+                {% endif %}
+                
+                {% if page.dimensions %}
+                <div class="detail-item">
+                    <h3>Dimensions</h3>
+                    <p>{{ page.dimensions }}</p>
+                </div>
+                {% endif %}
+                
+                {% if page.process %}
+                <div class="detail-item">
+                    <h3>Process</h3>
+                    <p>{{ page.process }}</p>
+                </div>
+                {% endif %}
+                
+                {% if page.condition %}
+                <div class="detail-item">
+                    <h3>Condition</h3>
+                    <p>{{ page.condition }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+
+        {% if page.rights_info %}
+        <section class="rights-info">
+            <h2>Rights Information</h2>
+            <div class="details-grid">
+                {% if page.rights_info.copyright_status %}
+                <div class="detail-item">
+                    <h3>Copyright Status</h3>
+                    <p>{{ page.rights_info.copyright_status }}</p>
+                </div>
+                {% endif %}
+                
+                {% if page.rights_info.access_status %}
+                <div class="detail-item">
+                    <h3>Access Status</h3>
+                    <p>{{ page.rights_info.access_status }}</p>
+                </div>
+                {% endif %}
+                
+                {% if page.rights_info.reproduction %}
+                <div class="detail-item">
+                    <h3>Reproduction</h3>
+                    <p>{{ page.rights_info.reproduction }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+        {% endif %}
+
+        {% if page.digitization %}
+        <section class="digitization">
+            <h2>Digital Copy Information</h2>
+            <div class="details-grid">
+                {% if page.digitization.status %}
+                <div class="detail-item">
+                    <h3>Status</h3>
+                    <p>{{ page.digitization.status }}</p>
+                </div>
+                {% endif %}
+                
+                {% if page.digitization.date %}
+                <div class="detail-item">
+                    <h3>Date Digitized</h3>
+                    <p>{{ page.digitization.date }}</p>
+                </div>
+                {% endif %}
+                
+                {% if page.digitization.resolution %}
+                <div class="detail-item">
+                    <h3>Resolution</h3>
+                    <p>{{ page.digitization.resolution }}</p>
+                </div>
+                {% endif %}
+                
+                {% if page.digitization.format %}
+                <div class="detail-item">
+                    <h3>File Format</h3>
+                    <p>{{ page.digitization.format }}</p>
+                </div>
+                {% endif %}
+                
+                {% if page.digitization.file_size %}
+                <div class="detail-item">
+                    <h3>File Size</h3>
+                    <p>{{ page.digitization.file_size }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+        {% endif %}
+    </article>
 </div>
+
+<style>
+.file-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.breadcrumb {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.breadcrumb a {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb .separator {
+    margin: 0 0.5rem;
+    color: #6c757d;
+}
+
+.breadcrumb .current {
+    color: #6c757d;
+}
+
+.file-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.file-content header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.file-content h1 {
+    margin: 0 0 1rem 0;
+    color: #212529;
+}
+
+.metadata {
+    display: grid;
+    gap: 1rem;
+}
+
+.metadata p {
+    margin: 0;
+}
+
+.metadata strong {
+    color: #495057;
+}
+
+section {
+    margin: 2rem 0;
+    padding-top: 1rem;
+    border-top: 1px solid #dee2e6;
+}
+
+section h2 {
+    margin: 0 0 1rem 0;
+    font-size: 1.5rem;
+    color: #212529;
+}
+
+.content {
+    margin: 2rem 0;
+    line-height: 1.6;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.detail-item {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+.detail-item h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    color: #495057;
+}
+
+.detail-item p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.objects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.object-card {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+.object-card .thumbnail {
+    margin-bottom: 1rem;
+}
+
+.object-card .thumbnail img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.object-card .object-info {
+    padding: 1rem;
+}
+
+.object-card .object-info h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    color: #495057;
+}
+
+.object-card .object-info .description {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.object-card .object-metadata {
+    margin: 1rem 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.object-card .object-metadata span {
+    margin-right: 1rem;
+}
+
+.object-card .download-button {
+    display: block;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background: #0056b3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.object-card .download-button:hover {
+    background: #0047b3;
+}
+
+@media (max-width: 768px) {
+    .file-container {
+        padding: 1rem;
+    }
+    
+    .file-content {
+        padding: 1rem;
+    }
+    
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .objects-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>

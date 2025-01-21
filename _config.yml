@@ -1,12 +1,14 @@
-title: Digital Archives Repository
-email: your-email@example.com
+title: John Smith Photography Collection
+email: archive@example.com
 description: >-
-  A digital repository for archival materials following RAD standards.
-baseurl: "/digital-archives-repository" # the subpath of your site, e.g. /blog
-url: "https://wongsyvr.github.io" # the base hostname & protocol for your site
+  Digital repository for the John Smith Photography Collection, featuring street photography,
+  portraits, and documentary work from 1950-1990.
+baseurl: "/digital-archives-repository"
+url: "https://wongsyvr.github.io"
 
 # Build settings
 markdown: kramdown
+theme: minima
 plugins:
   - jekyll-feed
   - jekyll-seo-tag

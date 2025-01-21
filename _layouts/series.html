@@ -48,6 +48,49 @@ layout: default
         </section>
         {% endif %}
 
+        {% assign files = site.files | where: "series_id", page.reference_code | sort: "reference_code" %}
+        {% if files.size > 0 %}
+        <section class="files-list">
+            <h2>Files in this Series</h2>
+            <div class="files-grid">
+                {% for file in files %}
+                <div class="file-card">
+                    {% if file.digital_objects %}
+                        {% assign first_object = file.digital_objects | first %}
+                        {% if first_object.thumbnail %}
+                        <div class="thumbnail">
+                            <img src="{{ site.baseurl }}/assets/thumbnails/{{ first_object.thumbnail }}" 
+                                 alt="Thumbnail for {{ file.title }}">
+                        </div>
+                        {% endif %}
+                    {% endif %}
+                    
+                    <div class="file-info">
+                        <h3><a href="{{ file.url | relative_url }}">{{ file.title }}</a></h3>
+                        <p class="reference">Reference: {{ file.reference_code }}</p>
+                        <p class="date">Date: {{ file.dates }}</p>
+                        {% if file.scope_content %}
+                        <p class="description">{{ file.scope_content | truncate: 150 }}</p>
+                        {% endif %}
+                        
+                        <div class="file-metadata">
+                            {% if file.location %}
+                            <span class="location">{{ file.location }}</span>
+                            {% endif %}
+                            {% if file.medium %}
+                            <span class="medium">{{ file.medium }}</span>
+                            {% endif %}
+                            {% if file.digital_objects %}
+                            <span class="digital">Digital Objects Available</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
         {% if page.rights_info %}
         <section class="rights-info">
             <h2>Rights Information</h2>
@@ -135,11 +178,6 @@ layout: default
     color: #495057;
 }
 
-.content {
-    margin: 2rem 0;
-    line-height: 1.6;
-}
-
 section {
     margin: 2rem 0;
     padding-top: 1rem;
@@ -152,6 +190,92 @@ section h2 {
     color: #212529;
 }
 
+.content {
+    margin: 2rem 0;
+    line-height: 1.6;
+}
+
+.files-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.file-card {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.file-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.file-card h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+}
+
+.file-card h3 a {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+.file-card h3 a:hover {
+    text-decoration: underline;
+}
+
+.file-card .reference {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin: 0 0 0.25rem 0;
+}
+
+.file-card .date {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.file-card .description {
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.file-metadata {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.file-metadata span {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.5rem;
+    background: #e9ecef;
+    border-radius: 4px;
+    color: #495057;
+}
+
+.thumbnail {
+    margin-bottom: 1rem;
+}
+
+.thumbnail img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.file-info {
+    padding: 1rem;
+}
+
 @media (max-width: 768px) {
     .series-container {
         padding: 1rem;
@@ -159,6 +283,10 @@ section h2 {
     
     .series-content {
         padding: 1rem;
+    }
+    
+    .files-grid {
+        grid-template-columns: 1fr;
     }
 }
 </style>

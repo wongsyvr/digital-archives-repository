@@ -10,11 +10,11 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <!-- Timeline.js -->
-    <link rel="stylesheet" href="/assets/css/timeline.css">
-    <script src="/assets/js/timeline.js"></script>
+    <link rel="stylesheet" href="{{ '/assets/css/timeline.css' | relative_url }}">
+    <script src="{{ '/assets/js/timeline.js' | relative_url }}"></script>
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
     
     {% seo %}
 </head>
@@ -22,11 +22,11 @@
     <header>
         <nav>
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/fonds">Fonds</a></li>
-                <li><a href="/map">Map</a></li>
-                <li><a href="/timeline">Timeline</a></li>
-                <li><a href="/search">Search</a></li>
+                <li><a href="{{ '/' | relative_url }}">Home</a></li>
+                <li><a href="{{ '/fonds' | relative_url }}">Fonds</a></li>
+                <li><a href="{{ '/map' | relative_url }}">Map</a></li>
+                <li><a href="{{ '/timeline' | relative_url }}">Timeline</a></li>
+                <li><a href="{{ '/search' | relative_url }}">Search</a></li>
             </ul>
         </nav>
     </header>
@@ -40,6 +40,6 @@
     </footer>
 
     <!-- Custom JS -->
-    <script src="/assets/js/main.js"></script>
+    <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
 </body>
 </html>

@@ -11,8 +11,6 @@ markdown: kramdown
 theme: minima
 plugins:
   - jekyll-feed
-  - jekyll-seo-tag
-  - jekyll-sitemap
 
 # Collections
 collections:
@@ -25,16 +23,9 @@ collections:
   files:
     output: true
     permalink: /files/:path/
-  items:
-    output: true
-    permalink: /items/:path/
 
-# Defaults
+# Collection defaults
 defaults:
-  - scope:
-      path: ""
-    values:
-      layout: "default"
   - scope:
       path: ""
       type: "fonds"
@@ -50,18 +41,15 @@ defaults:
       type: "files"
     values:
       layout: "file"
-  - scope:
-      path: ""
-      type: "items"
-    values:
-      layout: "item"
 
 # Exclude from processing
 exclude:
   - Gemfile
   - Gemfile.lock
   - node_modules
-  - vendor
-  - .git/
-  - .github/
-  - .gitignore
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - scripts/
+  - README.md

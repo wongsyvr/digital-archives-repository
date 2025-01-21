@@ -1,0 +1,33 @@
+---
+layout: default
+title: Collections
+permalink: /fonds/
+---
+
+<div class="fonds-container">
+    <h1>Archival Collections</h1>
+    
+    <div class="fonds-grid">
+        {% for fond in site.fonds %}
+        <div class="fond-card">
+            <h2><a href="{{ fond.url | relative_url }}">{{ fond.title }}</a></h2>
+            <div class="fond-metadata">
+                <p><strong>Date Range:</strong> {{ fond.dates }}</p>
+                <p><strong>Extent:</strong> {{ fond.extent }}</p>
+            </div>
+            <div class="fond-description">
+                {{ fond.excerpt }}
+            </div>
+            <div class="fond-series">
+                <h3>Series</h3>
+                <ul>
+                    {% assign related_series = site.series | where: "fonds", fond.id %}
+                    {% for series in related_series %}
+                    <li><a href="{{ series.url | relative_url }}">{{ series.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>

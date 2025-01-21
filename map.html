@@ -1,0 +1,119 @@
+---
+layout: default
+title: Interactive Map
+permalink: /map/
+---
+
+<div class="map-container">
+    <h1>Collection Locations</h1>
+    
+    <div id="archive-map"></div>
+    
+    <div class="map-sidebar">
+        <h2>Items by Location</h2>
+        <div id="location-list">
+            {% assign items_with_location = site.items | where_exp: "item", "item.location" %}
+            {% for item in items_with_location %}
+            <div class="location-item" data-lat="{{ item.location.lat }}" data-lng="{{ item.location.lng }}">
+                <h3><a href="{{ item.url | relative_url }}">{{ item.title }}</a></h3>
+                <p>{{ item.date }}</p>
+                {% if item.location.address %}
+                <p><strong>Address:</strong> {{ item.location.address }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize map
+    var map = L.map('archive-map').setView([22.302711, 114.177216], 11);  // Centered on Hong Kong
+    
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+    
+    // Add markers for each item
+    var items = document.querySelectorAll('.location-item');
+    items.forEach(function(item) {
+        var lat = parseFloat(item.dataset.lat);
+        var lng = parseFloat(item.dataset.lng);
+        
+        if (lat && lng) {
+            var marker = L.marker([lat, lng]).addTo(map);
+            
+            // Create popup content
+            var title = item.querySelector('h3 a').textContent;
+            var date = item.querySelector('p').textContent;
+            var popupContent = `
+                <h4>${title}</h4>
+                <p>${date}</p>
+                <a href="${item.querySelector('h3 a').href}">View Details</a>
+            `;
+            
+            marker.bindPopup(popupContent);
+        }
+    });
+});
+</script>
+
+<style>
+.map-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+#archive-map {
+    height: 600px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.map-sidebar {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    height: fit-content;
+}
+
+.location-item {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.location-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.location-item h3 {
+    margin: 0 0 0.5rem 0;
+}
+
+.location-item a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.location-item a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .map-container {
+        grid-template-columns: 1fr;
+    }
+    
+    #archive-map {
+        height: 400px;
+    }
+}
+</style>

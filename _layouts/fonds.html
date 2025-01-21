@@ -1,0 +1,31 @@
+---
+layout: default
+---
+<div class="hierarchy-level fonds-level">
+    <h1 class="hierarchy-title">{{ page.title }}</h1>
+    
+    <div class="metadata">
+        <p><strong>Reference Code:</strong> {{ page.reference_code }}</p>
+        <p><strong>Dates:</strong> {{ page.dates }}</p>
+        <p><strong>Extent:</strong> {{ page.extent }}</p>
+        <p><strong>Creator:</strong> {{ page.creator }}</p>
+        <p><strong>Administrative History:</strong> {{ page.administrative_history }}</p>
+        <p><strong>Scope and Content:</strong> {{ page.scope_content }}</p>
+    </div>
+
+    <div class="content">
+        {{ content }}
+    </div>
+
+    {% assign related_series = site.series | where: "fonds_id", page.reference_code %}
+    {% if related_series.size > 0 %}
+    <div class="related-series">
+        <h2>Series in this Fonds</h2>
+        <ul>
+        {% for series in related_series %}
+            <li><a href="{{ series.url }}">{{ series.title }}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>

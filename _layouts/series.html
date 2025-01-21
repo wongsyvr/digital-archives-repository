@@ -1,0 +1,39 @@
+---
+layout: default
+---
+<div class="hierarchy-level series-level">
+    <h1 class="hierarchy-title">{{ page.title }}</h1>
+    
+    <div class="metadata">
+        <p><strong>Reference Code:</strong> {{ page.reference_code }}</p>
+        <p><strong>Dates:</strong> {{ page.dates }}</p>
+        <p><strong>Physical Description:</strong> {{ page.physical_description }}</p>
+        <p><strong>Scope and Content:</strong> {{ page.scope_content }}</p>
+        {% if page.arrangement %}
+        <p><strong>Arrangement:</strong> {{ page.arrangement }}</p>
+        {% endif %}
+    </div>
+
+    <div class="content">
+        {{ content }}
+    </div>
+
+    {% assign parent_fonds = site.fonds | where: "reference_code", page.fonds_id | first %}
+    {% if parent_fonds %}
+    <div class="parent-fonds">
+        <p><strong>Part of Fonds:</strong> <a href="{{ parent_fonds.url }}">{{ parent_fonds.title }}</a></p>
+    </div>
+    {% endif %}
+
+    {% assign related_files = site.files | where: "series_id", page.reference_code %}
+    {% if related_files.size > 0 %}
+    <div class="related-files">
+        <h2>Files in this Series</h2>
+        <ul>
+        {% for file in related_files %}
+            <li><a href="{{ file.url }}">{{ file.title }}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>

@@ -1,0 +1,354 @@
+---
+layout: default
+---
+<div class="hierarchy-level compound-level">
+    <h1 class="hierarchy-title">{{ page.title }}</h1>
+    
+    <div class="metadata">
+        <p><strong>Reference Code:</strong> {{ page.reference_code }}</p>
+        <p><strong>Date Range:</strong> {{ page.date_range.start }} to {{ page.date_range.end }}</p>
+        <p><strong>Physical Description:</strong> {{ page.physical_description }}</p>
+        
+        {% if page.location %}
+        <div class="location-info">
+            <h2>Location Information</h2>
+            <div id="map" class="item-map" 
+                 data-lat="{{ page.location.lat }}" 
+                 data-lng="{{ page.location.lng }}" 
+                 data-title="{{ page.title }}"></div>
+            <p><strong>Address:</strong> {{ page.location.address }}</p>
+            <p><strong>Historic Name:</strong> {{ page.location.historic_name }}</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Component Overview -->
+    <div class="compound-overview">
+        <h2>Collection Contents</h2>
+        <div class="component-summary">
+            {% if page.compound_object.components.photographs %}
+            <div class="component-type">
+                <h3>Photographs</h3>
+                <p>Count: {{ page.compound_object.components.photographs.count }}</p>
+                <p>Formats: {{ page.compound_object.components.photographs.formats | join: ", " }}</p>
+            </div>
+            {% endif %}
+
+            {% if page.compound_object.components.audio %}
+            <div class="component-type">
+                <h3>Audio Recordings</h3>
+                <p>Count: {{ page.compound_object.components.audio.count }}</p>
+                <p>Total Duration: {{ page.compound_object.components.audio.duration }}</p>
+            </div>
+            {% endif %}
+
+            {% if page.compound_object.components.video %}
+            <div class="component-type">
+                <h3>Video Recordings</h3>
+                <p>Count: {{ page.compound_object.components.video.count }}</p>
+                <p>Total Duration: {{ page.compound_object.components.video.duration }}</p>
+            </div>
+            {% endif %}
+
+            {% if page.compound_object.components.documents %}
+            <div class="component-type">
+                <h3>Documents</h3>
+                <p>Count: {{ page.compound_object.components.documents.count }}</p>
+                <p>Types: {{ page.compound_object.components.documents.types | join: ", " }}</p>
+            </div>
+            {% endif %}
+
+            {% if page.compound_object.components.3d_data %}
+            <div class="component-type">
+                <h3>3D Data</h3>
+                <p>Count: {{ page.compound_object.components.3d_data.count }}</p>
+                <p>Types: {{ page.compound_object.components.3d_data.types | join: ", " }}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Detailed Components -->
+    <div class="compound-components">
+        {% if page.components.photographs %}
+        <section class="component-section photographs">
+            <h2>Photographs</h2>
+            <div class="media-grid">
+                {% for photo in page.components.photographs %}
+                <div class="media-item" id="{{ photo.id }}">
+                    <img src="{{ photo.media.url }}" alt="{{ photo.title }}">
+                    <h3>{{ photo.title }}</h3>
+                    <p>Date: {{ photo.date }}</p>
+                    <p>Format: {{ photo.format }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        {% if page.components.audio_recordings %}
+        <section class="component-section audio">
+            <h2>Audio Recordings</h2>
+            <div class="media-grid">
+                {% for audio in page.components.audio_recordings %}
+                <div class="media-item" id="{{ audio.id }}">
+                    <div class="audio-player">
+                        <audio controls>
+                            <source src="{{ audio.media.url }}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                    <h3>{{ audio.title }}</h3>
+                    <p>Date: {{ audio.date }}</p>
+                    <p>Duration: {{ audio.duration }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        {% if page.components.video_footage %}
+        <section class="component-section video">
+            <h2>Video Footage</h2>
+            <div class="media-grid">
+                {% for video in page.components.video_footage %}
+                <div class="media-item" id="{{ video.id }}">
+                    <div class="video-player">
+                        <video controls>
+                            <source src="{{ video.media.url }}" type="video/mp4">
+                            Your browser does not support the video element.
+                        </video>
+                    </div>
+                    <h3>{{ video.title }}</h3>
+                    <p>Date: {{ video.date }}</p>
+                    <p>Duration: {{ video.duration }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        {% if page.components.documents %}
+        <section class="component-section documents">
+            <h2>Documents</h2>
+            <div class="media-grid">
+                {% for doc in page.components.documents %}
+                <div class="media-item" id="{{ doc.id }}">
+                    <a href="{{ doc.media.url }}" target="_blank" class="document-link">
+                        <i class="fas fa-file-pdf"></i>
+                        <h3>{{ doc.title }}</h3>
+                    </a>
+                    <p>Date: {{ doc.date }}</p>
+                    <p>Format: {{ doc.format }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        {% if page.components.3d_scans %}
+        <section class="component-section 3d">
+            <h2>3D Scans</h2>
+            <div class="media-grid">
+                {% for scan in page.components.3d_scans %}
+                <div class="media-item" id="{{ scan.id }}">
+                    <div class="model-viewer">
+                        <model-viewer src="{{ scan.media.url }}"
+                                    alt="{{ scan.title }}"
+                                    auto-rotate
+                                    camera-controls>
+                        </model-viewer>
+                    </div>
+                    <h3>{{ scan.title }}</h3>
+                    <p>Date: {{ scan.date }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+    </div>
+
+    <!-- Relationships Visualization -->
+    <div class="relationships">
+        <h2>Component Relationships</h2>
+        {% if page.relationships.spatial %}
+        <div class="spatial-relationships">
+            <h3>Spatial Relationships</h3>
+            <ul>
+            {% for rel in page.relationships.spatial %}
+                <li>
+                    <strong>{{ rel.component_ids | join: " & " }}</strong>: 
+                    {{ rel.description }}
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if page.relationships.temporal %}
+        <div class="temporal-relationships">
+            <h3>Temporal Relationships</h3>
+            <ul>
+            {% for rel in page.relationships.temporal %}
+                <li>
+                    <strong>{{ rel.component_ids | join: " & " }}</strong>: 
+                    {{ rel.description }}
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Technical and Preservation Information -->
+    <div class="technical-preservation">
+        <h2>Technical & Preservation Information</h2>
+        
+        <div class="technical-metadata">
+            <h3>Technical Specifications</h3>
+            {% if page.technical_metadata.digitization %}
+            <div class="digitization-info">
+                {% for type in page.technical_metadata.digitization %}
+                <div class="digitization-type">
+                    <h4>{{ type[0] | capitalize }}</h4>
+                    <ul>
+                    {% for spec in type[1] %}
+                        <li><strong>{{ spec[0] | replace: '_', ' ' | capitalize }}:</strong> 
+                            {{ spec[1] }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="preservation-info">
+            <h3>Preservation Status</h3>
+            {% if page.preservation.storage_locations %}
+            <div class="storage-locations">
+                <h4>Storage Locations</h4>
+                <div class="physical-storage">
+                    <h5>Physical Storage</h5>
+                    <ul>
+                    {% for location in page.preservation.storage_locations.physical %}
+                        <li><strong>{{ location[0] | replace: '_', ' ' | capitalize }}:</strong> 
+                            {{ location[1] }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                <div class="digital-storage">
+                    <h5>Digital Storage</h5>
+                    <ul>
+                    {% for location in page.preservation.storage_locations.digital %}
+                        <li><strong>{{ location[0] | replace: '_', ' ' | capitalize }}:</strong> 
+                            {{ location[1] }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Access and Rights -->
+    <div class="access-rights">
+        <h2>Access & Rights Information</h2>
+        
+        {% if page.access %}
+        <div class="access-info">
+            <h3>Access Information</h3>
+            {% if page.access.viewing_requirements %}
+            <div class="viewing-requirements">
+                <h4>Viewing Requirements</h4>
+                <ul>
+                {% for req in page.access.viewing_requirements %}
+                    <li><strong>{{ req[0] | replace: '_', ' ' | capitalize }}:</strong> 
+                        {{ req[1] }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+            {% if page.access.accessibility %}
+            <div class="accessibility-info">
+                <h4>Accessibility Features</h4>
+                <ul>
+                {% for feature in page.access.accessibility %}
+                    {% if feature[1] == true %}
+                    <li>{{ feature[0] | replace: '_', ' ' | capitalize }}</li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+                {% if page.access.accessibility.languages %}
+                <p><strong>Available Languages:</strong> 
+                    {{ page.access.accessibility.languages | join: ", " }}</p>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if page.rights %}
+        <div class="rights-info">
+            <h3>Rights Information</h3>
+            <p><strong>Copyright Status:</strong> {{ page.rights.copyright_status }}</p>
+            <p><strong>Copyright Holder:</strong> {{ page.rights.copyright_holder }}</p>
+            <p><strong>Credit Line:</strong> {{ page.rights.credit_line }}</p>
+            
+            {% if page.rights.usage_restrictions %}
+            <div class="usage-restrictions">
+                <h4>Usage Restrictions</h4>
+                <ul>
+                {% for restriction in page.rights.usage_restrictions %}
+                    <li><strong>{{ restriction[0] | replace: '_', ' ' | capitalize }}:</strong> 
+                        {{ restriction[1] }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Project Context -->
+    {% if page.project_context %}
+    <div class="project-context">
+        <h2>Project Context</h2>
+        <p><strong>Purpose:</strong> {{ page.project_context.purpose }}</p>
+        <p><strong>Methodology:</strong> {{ page.project_context.methodology }}</p>
+        <p><strong>Funding:</strong> {{ page.project_context.funding }}</p>
+        
+        {% if page.project_context.project_team %}
+        <div class="project-team">
+            <h3>Project Team</h3>
+            <ul>
+            {% for member in page.project_context.project_team %}
+                <li><strong>{{ member.name }}</strong> - {{ member.role }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="content">
+        {{ content }}
+    </div>
+</div>
+
+<!-- Add 3D viewer support -->
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+<!-- Initialize components -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize map if present
+    if (document.getElementById('map')) {
+        initMap();
+    }
+    
+    // Initialize media viewers
+    initMediaViewers();
+});
+</script>

@@ -1,0 +1,49 @@
+title: Digital Archives Repository
+description: A digital repository for archival materials following RAD standards
+baseurl: ""
+url: ""
+
+# Build settings
+markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Collections for archival hierarchy
+collections:
+  fonds:
+    output: true
+    permalink: /fonds/:path/
+  series:
+    output: true
+    permalink: /series/:path/
+  files:
+    output: true
+    permalink: /files/:path/
+  items:
+    output: true
+    permalink: /items/:path/
+
+# Default layouts
+defaults:
+  - scope:
+      path: ""
+      type: "fonds"
+    values:
+      layout: "fonds"
+  - scope:
+      path: ""
+      type: "series"
+    values:
+      layout: "series"
+  - scope:
+      path: ""
+      type: "files"
+    values:
+      layout: "files"
+  - scope:
+      path: ""
+      type: "items"
+    values:
+      layout: "items"

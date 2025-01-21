@@ -1,0 +1,138 @@
+---
+layout: default
+---
+<div class="search-container">
+    <div class="search-header">
+        <h1>Search the Archive</h1>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Enter your search terms...">
+            <button id="search-button">Search</button>
+        </div>
+    </div>
+
+    <div class="search-interface">
+        <div class="filters-panel">
+            <h2>Filter Results</h2>
+            
+            <!-- Hierarchical Level Filter -->
+            <div class="filter-group">
+                <h3>Archival Level</h3>
+                <div class="filter-options" id="level-filters">
+                    <label><input type="checkbox" value="fonds"> Fonds</label>
+                    <label><input type="checkbox" value="series"> Series</label>
+                    <label><input type="checkbox" value="file"> Files</label>
+                    <label><input type="checkbox" value="item"> Items</label>
+                </div>
+            </div>
+
+            <!-- Date Range Filter -->
+            <div class="filter-group">
+                <h3>Date Range</h3>
+                <div class="filter-options">
+                    <input type="date" id="date-from" name="date-from">
+                    <span>to</span>
+                    <input type="date" id="date-to" name="date-to">
+                </div>
+            </div>
+
+            <!-- Media Type Filter -->
+            <div class="filter-group">
+                <h3>Media Type</h3>
+                <div class="filter-options" id="media-filters">
+                    <label><input type="checkbox" value="image"> Images</label>
+                    <label><input type="checkbox" value="audio"> Audio</label>
+                    <label><input type="checkbox" value="video"> Video</label>
+                    <label><input type="checkbox" value="document"> Documents</label>
+                    <label><input type="checkbox" value="3d"> 3D Objects</label>
+                </div>
+            </div>
+
+            <!-- Subject Filter -->
+            <div class="filter-group">
+                <h3>Subjects</h3>
+                <div class="filter-options" id="subject-filters">
+                    <!-- Dynamically populated from available subjects -->
+                </div>
+            </div>
+
+            <!-- Location Filter -->
+            <div class="filter-group">
+                <h3>Location</h3>
+                <div class="filter-options">
+                    <input type="text" id="location-search" placeholder="Search location...">
+                    <div id="location-map"></div>
+                </div>
+            </div>
+
+            <!-- Language Filter -->
+            <div class="filter-group">
+                <h3>Language</h3>
+                <div class="filter-options" id="language-filters">
+                    <!-- Dynamically populated from available languages -->
+                </div>
+            </div>
+
+            <!-- Rights Filter -->
+            <div class="filter-group">
+                <h3>Access Rights</h3>
+                <div class="filter-options" id="rights-filters">
+                    <label><input type="checkbox" value="open"> Open Access</label>
+                    <label><input type="checkbox" value="restricted"> Restricted</label>
+                    <label><input type="checkbox" value="permission"> Permission Required</label>
+                </div>
+            </div>
+
+            <button id="clear-filters">Clear All Filters</button>
+        </div>
+
+        <div class="results-panel">
+            <div class="results-header">
+                <div class="results-count">
+                    <span id="results-total">0</span> results found
+                </div>
+                <div class="results-sort">
+                    <label for="sort-by">Sort by:</label>
+                    <select id="sort-by">
+                        <option value="relevance">Relevance</option>
+                        <option value="date-desc">Date (Newest)</option>
+                        <option value="date-asc">Date (Oldest)</option>
+                        <option value="title">Title</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="search-results">
+                <!-- Results will be dynamically inserted here -->
+            </div>
+
+            <div class="results-pagination">
+                <button id="load-more" style="display: none;">Load More Results</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Result Template -->
+<template id="search-result-template">
+    <div class="search-result">
+        <div class="result-thumbnail">
+            <img src="" alt="">
+        </div>
+        <div class="result-content">
+            <h3 class="result-title">
+                <a href=""></a>
+            </h3>
+            <div class="result-metadata">
+                <span class="result-level"></span>
+                <span class="result-date"></span>
+                <span class="result-type"></span>
+            </div>
+            <p class="result-description"></p>
+            <div class="result-subjects"></div>
+        </div>
+    </div>
+</template>
+
+<!-- Load search dependencies -->
+<script src="https://unpkg.com/lunr/lunr.js"></script>
+<script src="{{ '/assets/js/search.js' | relative_url }}"></script>

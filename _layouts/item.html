@@ -1,0 +1,36 @@
+---
+layout: default
+---
+<div class="hierarchy-level item-level">
+    <h1 class="hierarchy-title">{{ page.title }}</h1>
+    
+    <div class="metadata">
+        <p><strong>Reference Code:</strong> {{ page.reference_code }}</p>
+        <p><strong>Date:</strong> {{ page.date }}</p>
+        <p><strong>Physical Description:</strong> {{ page.physical_description }}</p>
+        {% if page.location %}
+        <p><strong>Location:</strong> {{ page.location.lat }}, {{ page.location.lng }}</p>
+        {% endif %}
+    </div>
+
+    {% if page.location %}
+    <div id="map" class="item-map" data-lat="{{ page.location.lat }}" data-lng="{{ page.location.lng }}" data-title="{{ page.title }}"></div>
+    {% endif %}
+
+    <div class="content">
+        {{ content }}
+    </div>
+
+    {% if page.media %}
+    <div class="media-viewer" data-type="{{ page.media.type }}" data-url="{{ page.media.url }}">
+        <!-- Media viewer will be initialized by JavaScript -->
+    </div>
+    {% endif %}
+
+    {% assign parent_file = site.files | where: "reference_code", page.file_id | first %}
+    {% if parent_file %}
+    <div class="parent-file">
+        <p><strong>Part of File:</strong> <a href="{{ parent_file.url }}">{{ parent_file.title }}</a></p>
+    </div>
+    {% endif %}
+</div>
